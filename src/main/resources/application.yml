@@ -16,4 +16,5 @@ spring:
       group-id: library-events-listener-group
     listener:
       ack-mode: MANUAL
+      concurrency: 2
 
