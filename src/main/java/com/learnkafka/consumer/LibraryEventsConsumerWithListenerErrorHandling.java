@@ -17,7 +17,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @Slf4j
 public class LibraryEventsConsumerWithListenerErrorHandling {
 

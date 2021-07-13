@@ -8,6 +8,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
 import org.springframework.kafka.listener.KafkaListenerErrorHandler;
 import org.springframework.kafka.listener.SeekToCurrentErrorHandler;
+import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries;
 import org.springframework.kafka.support.KafkaHeaders;
 
 @Configuration
@@ -28,7 +29,11 @@ public class KafkaConfig {
     /* Boot will autowire this into the container factory. */
     @Bean
     public SeekToCurrentErrorHandler errorHandler(DeadLetterPublishingRecoverer deadLetterPublishingRecoverer) {
-        return new SeekToCurrentErrorHandler(deadLetterPublishingRecoverer);
+        ExponentialBackOffWithMaxRetries backOff = new ExponentialBackOffWithMaxRetries(3);
+        backOff.setInitialInterval(1_000L);
+        backOff.setMultiplier(2.0);
+        backOff.setMaxInterval(10_000L);
+        return new SeekToCurrentErrorHandler(deadLetterPublishingRecoverer, backOff);
     }
 
     /** Configure the {@link DeadLetterPublishingRecoverer} to publish poison pill bytes to a dead letter topic:
