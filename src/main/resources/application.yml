@@ -19,8 +19,8 @@ spring:
       concurrency: 2
     producer:
       bootstrap-servers: localhost:9092
-      key-deserializer: org.apache.kafka.common.serialization.IntegerSerializer
-      value-deserializer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
     template:
       default-topic: library-events
   datasource:
