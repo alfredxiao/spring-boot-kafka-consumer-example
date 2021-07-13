@@ -17,9 +17,9 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 @Slf4j
-public class LibraryEventsConsumerSimpleErrorHandling {
+public class LibraryEventsConsumerWithListenerErrorHandling {
 
     @Autowired
     LibraryEventsService libraryEventsService;
@@ -28,10 +28,11 @@ public class LibraryEventsConsumerSimpleErrorHandling {
             topics = {"library-events"},
             errorHandler = "simpleKafkaListenerErrorHandler"
     )
-    public void onMessage(@Header(KafkaHeaders.DELIVERY_ATTEMPT) int delivery, ConsumerRecord<Integer, String> consumerRecord, Acknowledgment acknowledgment) throws JsonProcessingException {
-        log.info("Received ConsumerRecord, with delivery_attempt: {}, : {} ", delivery, consumerRecord);
+    // @Header(KafkaHeaders.DELIVERY_ATTEMPT) Integer delivery,
+    public void onMessage(ConsumerRecord<Integer, String> consumerRecord/*, Acknowledgment acknowledgment*/) throws JsonProcessingException {
+        log.info("Received ConsumerRecord, with delivery_attempt: {}, : {} ", -1, consumerRecord);
         libraryEventsService.processLibraryEvent(consumerRecord);
-        acknowledgment.acknowledge();
+        //acknowledgment.acknowledge();
     }
 }
 
@@ -44,7 +45,10 @@ public class LibraryEventsConsumerSimpleErrorHandling {
 
   3. if simpleKafkaListenerErrorHandler.handleError() keeps throwing exception (for the same record), there will also
   be totally 10 attempts to delivery the message (default behaviour)
-
-  4. After 10 attempts, the offset commit for this record is going to happen regardless of ack-mode being BATCH (default)
+    - After 10 attempts, the offset commit for this record is going to happen regardless of ack-mode being BATCH (default)
   or MANUAL.
+
+  4. when in MANUAL ack mode, it is dangerous to have the listener error handler not throwing the exception, because
+  this is telling spring: 1. the record is HANDLED and considered PROCESSED; 2. but the record is NOT acknowledged.
+  result is:
  */
