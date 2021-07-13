@@ -120,9 +120,6 @@ public class LibraryEventsConsumerIntegrationTest {
         latch.await(3, TimeUnit.SECONDS);
 
         // then
-        verify(libraryEventsConsumerSpy, times(1)).onMessage(isA(ConsumerRecord.class));
-        verify(libraryEventsServiceSpy, times(1)).processLibraryEvent(isA(ConsumerRecord.class));
-
         LibraryEvent persistedLibraryEvent = libraryEventsRepository.findById(libraryEvent.getLibraryEventId()).get();
         assertEquals("Kafka in Real Projects 2.x", persistedLibraryEvent.getBook().getBookName());
         assertEquals("alfred", persistedLibraryEvent.getBook().getBookAuthor());
