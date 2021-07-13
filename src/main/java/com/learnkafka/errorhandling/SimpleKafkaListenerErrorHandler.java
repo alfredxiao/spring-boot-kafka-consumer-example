@@ -12,6 +12,7 @@ public class SimpleKafkaListenerErrorHandler implements KafkaListenerErrorHandle
     @Override
     public Object handleError(Message<?> message, ListenerExecutionFailedException exception) {
         log.info("in SimpleKafkaListenerErrorHandler.handleError, message is {}, exception is {} ", message, exception);
+
         return null;
     }
 }
