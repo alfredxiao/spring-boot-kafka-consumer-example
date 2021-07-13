@@ -5,8 +5,11 @@ import com.learnkafka.service.LibraryEventsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.listener.DeliveryAttemptAware;
+import org.springframework.kafka.listener.ErrorHandler;
+import org.springframework.kafka.listener.SeekToCurrentErrorHandler;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.TopicPartitionOffset;
@@ -14,7 +17,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @Slf4j
 public class LibraryEventsConsumerSimpleErrorHandling {
 
@@ -31,6 +34,7 @@ public class LibraryEventsConsumerSimpleErrorHandling {
         acknowledgment.acknowledge();
     }
 }
+
 /*
   1. if simpleKafkaListenerErrorHandler.handleError() does not throw the original exception or new exception,
   this record is considered PROCESSED and won't be attempted again. consumer will move on to next message
