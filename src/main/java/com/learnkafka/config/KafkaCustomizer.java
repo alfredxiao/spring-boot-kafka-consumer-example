@@ -36,6 +36,13 @@ public class KafkaCustomizer {
             log.info("Enabling retryTemplate and LoggingErrorHandler");
             factory.setRetryTemplate(retryTemplate);
             factory.setErrorHandler(new LoggingErrorHandler());
+
+            factory.setRecoveryCallback(context -> {
+                log.info("Inside the recovery callback");
+
+                // not throwing exception means RECOVERED, will NOT move on to error handler
+                return null;
+            });
         }
     }
 

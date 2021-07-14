@@ -50,7 +50,7 @@ public class KafkaConfiguration {
 
     /* Configure the {@link DeadLetterPublishingRecoverer} to publish poison pill bytes to a dead letter topic: "*.DLT" */
     @Bean
-    public DeadLetterPublishingRecoverer publisher(KafkaTemplate<?, ?> bytesTemplate) {
+    public DeadLetterPublishingRecoverer dltPublisher(KafkaTemplate<?, ?> bytesTemplate) {
         return new DeadLetterPublishingRecoverer(bytesTemplate);
     }
 }
